@@ -49,7 +49,7 @@ class Settings
 
         // Set them all
         foreach ($settings as $setting) {
-            self::$cache[$setting->slug] = isset($setting->value) ? $setting->value : $setting->default;
+            self::$cache[SITE_REF.'_'.$setting->slug] = isset($setting->value) ? $setting->value : $setting->default;
         }
     }
 
@@ -90,12 +90,12 @@ class Settings
      */
     public static function get($key)
     {
-        if (isset(self::$cache[$key])) {
-            return self::$cache[$key];
+        if (isset(self::$cache[SITE_REF.'_'.$key])) {
+            return self::$cache[$SITE_REF.'_'.key];
         }
 
         // Store it for later
-        return self::$cache[$key] = config_item($key);
+        return self::$cache[SITE_REF.'_'.$key] = config_item($key);
     }
 
     /**
@@ -114,7 +114,7 @@ class Settings
                 $setting->where('slug', '=', $key)->update(array('value' => $value));
             }
 
-            self::$cache[$key] = $value;
+            self::$cache[SITE_REF.'_'.$key] = $value;
 
             return true;
         }
@@ -135,7 +135,7 @@ class Settings
     {
         // store the temp value in the cache so that all subsequent calls
         // for this request will use it instead of the database value
-        self::$cache[$key] = $value;
+        self::$cache[SITE_REF.'_'.$key] = $value;
     }
 
     /**
